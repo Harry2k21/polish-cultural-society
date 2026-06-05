@@ -1,11 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 const filterCategories = [
-  'Shops',
+  'Schools',
   'Restaurants',
   'Churches',
   'Societies',
@@ -13,13 +14,13 @@ const filterCategories = [
 
 const featuredLocations = [
   {
-    name: 'Polski Sklep Sheffield',
-    type: 'Shop',
+    name: 'Polish Church Sheffield',
+    type: 'Church',
     city: 'Sheffield',
   },
   {
-    name: 'Polonia Restaurant',
-    type: 'Restaurant',
+    name: 'Polish School Manchester',
+    type: 'School',
     city: 'Manchester',
   },
   {
@@ -72,14 +73,49 @@ const polishChurches = [
   },
 ];
 
+const polishSocieties = [
+  {
+    name: 'University of Sheffield Polish Society',
+    type: 'Student Society',
+    city: 'Sheffield',
+    position: [53.3811, -1.4701],
+  },
+  {
+    name: 'University of Manchester Polish Society',
+    type: 'Student Society',
+    city: 'Manchester',
+    position: [53.4668, -2.2339],
+  },
+  {
+    name: 'UCL Polish Society',
+    type: 'Student Society',
+    city: 'London',
+    position: [51.5246, -0.1340],
+  },
+
+]
+
 const churchIcon = new L.Icon({
-  iconUrl: 'https://img.icons8.com/?size=100&id=ZizUFqOcq7ts&format=png&color=000000',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconUrl:
+    'https://img.icons8.com/?size=100&id=ZizUFqOcq7ts&format=png&color=000000',
+  shadowUrl:
+    'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconSize: [30, 30],
+  iconAnchor: [12, 41],
+});
+
+const societyIcon = new L.Icon({
+  iconUrl:
+    'https://img.icons8.com/?size=100&id=71188&format=png&color=000000',
+  shadowUrl:
+    'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
   iconSize: [30, 30],
   iconAnchor: [12, 41],
 });
 
 export default function MapPage() {
+  const [activeFilter, setActiveFilter] = useState('Churches');
+
   return (
     <section className="pt-32 pb-32 px-6 max-w-7xl mx-auto">
       {/* Header */}
@@ -98,7 +134,12 @@ export default function MapPage() {
           {filterCategories.map((item) => (
             <button
               key={item}
-              className="px-4 py-2 rounded-full border border-black/10 dark:border-white/10 hover:bg-red-600 hover:text-white transition-all"
+              onClick={() => setActiveFilter(item)}
+              className={`px-4 py-2 rounded-full border border-black/10 dark:border-white/10 transition-all ${
+                activeFilter === item
+                  ? 'bg-red-600 text-white'
+                  : 'hover:bg-red-600 hover:text-white'
+              }`}
             >
               {item}
             </button>
@@ -106,10 +147,9 @@ export default function MapPage() {
         </div>
       </div>
 
-      {/* Map + Sidebar */}
-      <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-8">
-        {/* Map */}
-        <div className="h-[650px] rounded-[32px] overflow-hidden border border-black/10 dark:border-white/10 shadow-2xl">
+      {/* Map */}
+      <div className="gap-8">
+        <div className="h-[500px] w-full rounded-[32px] overflow-hidden border border-black/10 dark:border-white/10 shadow-2xl">
           <MapContainer
             center={[54.5, -2.5]}
             zoom={6}
@@ -117,63 +157,50 @@ export default function MapPage() {
             className="h-full w-full"
           >
             <TileLayer
-              attribution=''
+              attribution=""
               url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
             />
 
-            {polishChurches.map((church) => (
-              <Marker
-                key={church.name}
-                position={church.position as [number, number]}
-                icon={churchIcon}
-              >
-                <Popup>
-                  <div className="space-y-1">
-                    <h3 className="font-bold">{church.name}</h3>
-                    <p>{church.city}</p>
-                    <p className="text-red-600 text-sm">
-                      Catholic Polish Mission
-                    </p>
-                  </div>
-                </Popup>
-              </Marker>
-            ))}
+            {/* CHURCHES */}
+            {activeFilter === 'Churches' &&
+              polishChurches.map((church) => (
+                <Marker
+                  key={church.name}
+                  position={church.position as [number, number]}
+                  icon={churchIcon}
+                >
+                  <Popup>
+                    <div className="space-y-1">
+                      <h3 className="font-bold">{church.name}</h3>
+                      <p>{church.city}</p>
+                      <p className="text-red-600 text-sm">
+                        Catholic Polish Mission
+                      </p>
+                    </div>
+                  </Popup>
+                </Marker>
+              ))}
+
+            {/* SOCIETIES */}
+            {activeFilter === 'Societies' &&
+              polishSocieties.map((society) => (
+                <Marker
+                  key={society.name}
+                  position={society.position as [number, number]}
+                  icon={societyIcon}
+                >
+                  <Popup>
+                    <div className="space-y-1">
+                      <h3 className="font-bold">{society.name}</h3>
+                      <p>{society.city}</p>
+                      <p className="text-red-600 text-sm">
+                        {society.type}
+                      </p>
+                    </div>
+                  </Popup>
+                </Marker>
+              ))}
           </MapContainer>
-        </div>
-
-        {/* Sidebar Listings */}
-        <div className="space-y-5">
-          {featuredLocations.map((location) => (
-            <div
-              key={location.name}
-              className="group p-6 rounded-3xl border border-black/10 dark:border-white/10 bg-white/70 dark:bg-white/5 backdrop-blur-xl hover:-translate-y-2 hover:shadow-2xl transition-all"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <span className="px-3 py-1 rounded-full bg-red-500/10 text-red-600 text-xs font-semibold">
-                  {location.type}
-                </span>
-
-                <span className="text-sm text-neutral-500">
-                  {location.city}
-                </span>
-              </div>
-
-              <h3 className="text-2xl font-bold mb-3 group-hover:text-red-600 transition-colors">
-                {location.name}
-              </h3>
-
-              <p className="text-neutral-600 dark:text-neutral-300 leading-relaxed mb-5">
-                Community verified listing with location details,
-                reviews, opening times, and social links.
-              </p>
-
-              <button className="text-red-600 font-semibold hover:translate-x-2 transition-transform">
-                View Details →
-              </button>
-            </div>
-          ))}
-
-        
         </div>
       </div>
     </section>

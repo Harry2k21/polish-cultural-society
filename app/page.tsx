@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 };
 
 const stats = [
-  { value: '120+', label: 'Businesses' },
-  { value: '35+',  label: 'Restaurants' },
-  { value: '20+',  label: 'Universities' },
+  { value: '29+', label: 'Polish Churches' },
+  { value: '34+',  label: 'Polish Schools' },
+  { value: '11+',  label: 'University Societies' },
   { value: '5k+',  label: 'Community Members' },
 ];
 

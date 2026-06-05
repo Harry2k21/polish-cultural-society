@@ -14,17 +14,17 @@ export default function Header() {
           <Link href="/map"       className="hover:text-red-500 transition-colors">Map</Link>
           <Link href="/societies" className="hover:text-red-500 transition-colors">Societies</Link>
           <Link href="/history"   className="hover:text-red-500 transition-colors">History</Link>
-          <Link href="/events"    className="hover:text-red-500 transition-colors">Events</Link>
+          {/* <Link href="/events"    className="hover:text-red-500 transition-colors">Events</Link> */}
           <Link href="/contact"   className="hover:text-red-500 transition-colors">Contact</Link>
         </nav>
 
         <div className="flex items-center gap-3">
           <button className="px-4 py-2 rounded-full border border-black/10 dark:border-white/10 hover:scale-105 transition-all">
-            EN / PL
+            <img className="h-5" src="https://img.icons8.com/?size=100&id=kqaFfGqzD2b3&format=png&color=ffffff"/>
           </button>
-          <button className="px-4 py-2 rounded-full bg-red-600 text-white hover:bg-red-700 transition-all shadow-lg shadow-red-500/20">
-            Join Community
-          </button>
+          <a href="/map" className="px-4 py-2 rounded-full bg-red-600 text-white hover:bg-red-700 transition-all shadow-lg shadow-red-500/20">
+            Explore Map
+          </a>
         </div>
       </div>
     </header>
